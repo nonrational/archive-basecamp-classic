@@ -1,0 +1,30 @@
+#!/usr/bin/env ruby
+
+require 'pry'
+require 'dotenv/load'
+require 'nokogiri'
+
+# require 'basecamp'
+# Basecamp.establish_connection!(ENV['BASECAMP_HOST'], ENV['BASECAMP_API_TOKEN'], 'X')
+
+require 'sqlite3'
+require 'active_record'
+
+def load_paths!
+  path = File.expand_path("../..", __FILE__)
+  Dir.glob("#{path}/**/*.rb") { |f| puts f; load f }
+end
+
+def reload!
+  Object.send(:remove_const, :BasecampClient)
+  load_paths!
+end
+
+load_paths!
+
+ActiveRecord::Base.logger = Logger.new(STDERR)
+
+db_config = YAML::load(File.open("config/database.yml"))
+ActiveRecord::Base.establish_connection(db_config)
+
+Pry.start

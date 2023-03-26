@@ -1,0 +1,5 @@
+.env
+*.pdf
+downloads/*.*
+!downloads/.keep
+*.db

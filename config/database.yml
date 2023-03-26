@@ -1,0 +1,4 @@
+# config/database.yml
+---
+adapter: sqlite3
+database: db/basecamp.db
