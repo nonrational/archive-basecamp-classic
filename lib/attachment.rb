@@ -8,29 +8,31 @@ class Attachment < ActiveRecord::Base
   def stream_download
     return if file_exists?
 
-    FileUtils.mkdir_p filedir
+    FileUtils.mkdir_p directory
 
-    File.open(relative_filepath, "w") do |file|
+    File.open(filepath, "w") do |file|
       file.binmode
       HTTParty.get(download_url, stream_body: true) do |fragment|
         file.write(fragment)
       end
     end
+
+    puts filepath
   end
 
-  def relative_filepath
-    File.join(filedir, filename)
+  def filepath
+    @filepath ||= File.join(directory, filename)
   end
 
-  def filedir
-    created_on.strftime("%Y-%m-%d")
+  def directory
+    @directory ||= File.join("downloads", created_on.strftime("%Y-%m").split('-'))
   end
 
   def filename
-    "#{id}__#{original_filename.tr(" ", "_")}"
+    @filename ||= "#{id}__#{created_on.strftime("%Y-%m-%d")}__#{original_filename.tr(" ", "_")}"
   end
 
   def file_exists?
-    File.exist?(relative_filepath)
+    File.exist?(filepath)
   end
 end
