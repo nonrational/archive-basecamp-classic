@@ -1,6 +1,6 @@
-class CreatePersons < ActiveRecord::Migration[6.0]
+class CreatePeople < ActiveRecord::Migration[6.0]
   def change
-    create_table :persons do |t|
+    create_table :people do |t|
       t.integer :client_id
       t.boolean :deleted
       t.string :im_handle
@@ -14,6 +14,7 @@ class CreatePersons < ActiveRecord::Migration[6.0]
       t.string :uuid
       t.string :first_name
       t.string :last_name
+      t.string :user_name
       t.string :time_zone_name
       t.integer :signal_identity_id
       t.string :email_address

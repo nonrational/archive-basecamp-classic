@@ -3,6 +3,7 @@ require "bundler/setup"
 Bundler.require
 require "json"
 require "yaml"
+require "active_record"
 
 require "pry"
 
@@ -12,14 +13,19 @@ def load_and_initialize
 end
 
 namespace :basecamp do
-  task :run do
+  task :fetch_attachments do
     load_and_initialize
     Abc::ProjectAttachmentArchive.default.fetch_all
   end
 
-  task :download do
+  task :download_attachments do
     load_and_initialize
     Abc::Attachment.download_all
+  end
+
+  task :fetch_people do
+    load_and_initialize
+    Abc::Person.fetch_all
   end
 end
 
@@ -36,6 +42,13 @@ namespace :db do
   task migrate: :create do
     ActiveRecord::Base.establish_connection(db_config)
     ActiveRecord::MigrationContext.new("db/migrate/", ActiveRecord::SchemaMigration).migrate
+    puts "Database migrated"
+  end
+
+  desc "Rollback the most recent migration"
+  task :rollback do
+    ActiveRecord::Base.establish_connection(db_config)
+    ActiveRecord::MigrationContext.new("db/migrate/", ActiveRecord::SchemaMigration).rollback
     puts "Database migrated"
   end
 
