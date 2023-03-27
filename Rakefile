@@ -4,32 +4,22 @@ Bundler.require
 require "json"
 require "yaml"
 
-require "active_record"
-require "dotenv/load"
-require "nokogiri"
-require "sqlite3"
+require "pry"
 
 def load_and_initialize
   path = File.expand_path("..", __FILE__)
-  Dir.glob("#{path}/**/*.rb") { |f|
-    puts f
-    load f
-  }
-
-  # ActiveRecord::Base.logger = Logger.new(STDERR)
-  db_config = YAML.load(File.open("config/database.yml"))
-  ActiveRecord::Base.establish_connection(db_config)
+  Dir.glob("#{path}/lib/**/*.rb").sort.each { |f| load f }
 end
 
 namespace :basecamp do
   task :run do
     load_and_initialize
-    BasecampProjectAttachmentIterator.default.fetch_all
+    Abc::ProjectAttachmentArchive.default.fetch_all
   end
 
   task :download do
     load_and_initialize
-    Attachment.download_all
+    Abc::Attachment.download_all
   end
 end
 

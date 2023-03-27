@@ -1,4 +1,4 @@
-class BasecampProjectAttachmentIterator
+class Abc::ProjectAttachmentArchive
   attr_reader :project_slug
 
   def self.default
