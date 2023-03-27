@@ -19,7 +19,7 @@ class BasecampProjectAttachmentIterator
         # record which batch we found this attachment in so we can resume
         rr[:batch_id] = @index
 
-        Attachment.create_with(rr.except(:id)).find_or_create_by(id: rr[:id]).tap do |a|
+        Abc::Attachment.create_with(rr.except(:id)).find_or_create_by(id: rr[:id]).tap do |a|
           puts "#{a.id} - #{a.filename}"
         end
       end

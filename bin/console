@@ -4,19 +4,19 @@ require 'pry'
 require 'dotenv/load'
 require 'nokogiri'
 
-# require 'basecamp'
-# Basecamp.establish_connection!(ENV['BASECAMP_HOST'], ENV['BASECAMP_API_TOKEN'], 'X')
+require 'basecamp'
+Basecamp.establish_connection!(ENV['BASECAMP_HOST'], ENV['BASECAMP_API_TOKEN'], 'x')
 
 require 'sqlite3'
 require 'active_record'
 
 def load_paths!
   path = File.expand_path("../..", __FILE__)
-  Dir.glob("#{path}/**/*.rb") { |f| puts f; load f }
+  Dir.glob("#{path}/**/*.rb").sort.each { |f| puts f; load f }
 end
 
 def reload!
-  Object.send(:remove_const, :BasecampClient)
+  Object.send(:remove_const, :Abc)
   load_paths!
 end
 

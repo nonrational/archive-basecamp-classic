@@ -1,6 +1,6 @@
 require "fileutils"
 
-class Attachment < ActiveRecord::Base
+class Abc::Attachment < ActiveRecord::Base
   def self.download_all
     all.each(&:stream_download)
   end
@@ -25,7 +25,7 @@ class Attachment < ActiveRecord::Base
   end
 
   def directory
-    @directory ||= File.join("downloads", created_on.strftime("%Y-%m").split('-'))
+    @directory ||= File.join("downloads", created_on.strftime("%Y-%m").split("-"))
   end
 
   def filename
