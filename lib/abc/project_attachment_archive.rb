@@ -7,7 +7,7 @@ class Abc::ProjectAttachmentArchive
 
   def initialize(project_slug)
     @project_slug = project_slug
-    @index = Attachment.maximum(:batch_id) || 0
+    @index = Abc::Attachment.maximum(:batch_id) || 0
     @attachments = []
     @done = false
     @next_batch = []
@@ -18,6 +18,7 @@ class Abc::ProjectAttachmentArchive
       @next_batch.map(&:symbolize_keys).each do |rr|
         # record which batch we found this attachment in so we can resume
         rr[:batch_id] = @index
+        rr[:project_slug] = @project_slug
 
         Abc::Attachment.create_with(rr.except(:id)).find_or_create_by(id: rr[:id]).tap do |a|
           puts "#{a.id} - #{a.filename}"

@@ -2,11 +2,21 @@ require "fileutils"
 
 class Abc::Attachment < ActiveRecord::Base
   def self.download_all
-    all.each(&:stream_download)
+    downloaded_this_minute = 0
+    all.each do |a|
+      a.stream_download
+      downloaded_this_minute += 1
+      if downloaded_this_minute > 50
+        puts "rate-limit sleeping for 60s"
+        sleep 60
+        downloaded_this_minute = 0
+      end
+    end
   end
 
   def stream_download
     return if file_exists?
+    raise if project_slug.empty?
 
     FileUtils.mkdir_p directory
 
@@ -25,7 +35,7 @@ class Abc::Attachment < ActiveRecord::Base
   end
 
   def directory
-    @directory ||= File.join("downloads", created_on.strftime("%Y-%m").split("-"))
+    @directory ||= File.join("projects", project_slug, "attachments", created_on.strftime("%Y-%m").split("-"))
   end
 
   def filename

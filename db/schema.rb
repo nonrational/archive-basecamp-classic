@@ -10,8 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_26_162755) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_28_085159) do
   create_table "attachments", force: :cascade do |t|
+    t.integer "batch_id"
     t.integer "byte_size"
     t.integer "category_id"
     t.integer "collection"
@@ -29,9 +30,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_26_162755) do
     t.integer "project_id"
     t.integer "thumbnail_key"
     t.integer "version"
+    t.string "project_slug"
   end
 
-  create_table "persons", force: :cascade do |t|
+  create_table "people", force: :cascade do |t|
     t.integer "client_id"
     t.boolean "deleted"
     t.string "im_handle"
@@ -45,6 +47,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_26_162755) do
     t.string "uuid"
     t.string "first_name"
     t.string "last_name"
+    t.string "user_name"
     t.string "time_zone_name"
     t.integer "signal_identity_id"
     t.string "email_address"
