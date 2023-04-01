@@ -4,30 +4,32 @@ class Abc::Attachment < ActiveRecord::Base
   def self.download_all
     downloaded_this_minute = 0
     all.each do |a|
-      a.stream_download
+      next if a.file_exists?
+
+      a.binwrite
       downloaded_this_minute += 1
-      if downloaded_this_minute > 50
-        puts "rate-limit sleeping for 60s"
+
+      if downloaded_this_minute > 30
+        puts "Hit #{downloaded_this_minute} this minute. Sleeping for 60s..."
         sleep 60
         downloaded_this_minute = 0
       end
     end
   end
 
-  def stream_download
-    return if file_exists?
+  def binwrite
     raise if project_slug.empty?
 
     FileUtils.mkdir_p directory
 
-    File.open(filepath, "w") do |file|
-      file.binmode
-      HTTParty.get(download_url, stream_body: true) do |fragment|
-        file.write(fragment)
+    BasecampClient.get(download_url, follow_redirects: true).tap do |response|
+      if response.response.code != "200" || response.response.content_length != byte_size
+        binding.pry
       end
-    end
 
-    puts filepath
+      size = File.binwrite(filepath, response.body)
+      puts download_url + "\n\t→ " + filepath + "\n\t→ #{size}"
+    end
   end
 
   def filepath

@@ -1,5 +1,4 @@
 .env
 *.pdf
-downloads/**/*
-!downloads/.keep
 *.db
+/projects
