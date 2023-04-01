@@ -9,6 +9,7 @@ class BasecampClient
 
   base_uri "https://#{ENV.fetch("BASECAMP_HOST")}"
   headers({
+    "User-Agent" => "Archive Basecamp Classic (https://github.com/nonrational/archive-basecamp-classic)",
     "Content-Type" => "application/xml",
     "Accept" => "application/xml"
   })
