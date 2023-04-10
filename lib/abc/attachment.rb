@@ -1,6 +1,6 @@
 require "fileutils"
 
-class Abc::Attachment < ActiveRecord::Base
+class Abc::Attachment < Abc::ApplicationRecord
   def self.download_all
     downloaded_this_minute = 0
     all.each do |a|

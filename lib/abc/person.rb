@@ -1,6 +1,6 @@
 require "fileutils"
 
-class Abc::Person < ActiveRecord::Base
+class Abc::Person < Abc::ApplicationRecord
   def self.fetch_all
     Basecamp::Person.all.each do |bp|
       attrs = bp.attributes.symbolize_keys
