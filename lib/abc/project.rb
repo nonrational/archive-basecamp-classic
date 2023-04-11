@@ -1,6 +1,8 @@
 require "fileutils"
 
 class Abc::Project < Abc::ApplicationRecord
+  has_many :todos
+
   def self.fetch_all
     Abc::Project.delete_all
 
